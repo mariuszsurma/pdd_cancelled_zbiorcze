@@ -11,6 +11,8 @@ import pandas
 from datetime import datetime as dt
 from pdd_utils import * 
 
+import configparser
+
 '''
 Ekstra raport z PDD wind0 dla wszystkich Agentów o ile Total polisy >0
 Dla wyjątkowych wszystkie cancelled niezależnie od Total Policy 
@@ -20,10 +22,8 @@ Kolumny takie jak w zestawianiu płatności zbiorczych polisa;termin;agent;klien
 
 '''
 
-special = ['MUBI']
+MAIN_DIR    = os.path.dirname(os.path.abspath(sys.argv[0])) 
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
 
 version = "1.0"
 title = 'pdd_anulowane_zbiorcze'
@@ -33,12 +33,19 @@ script_name = "pdd_anulowane_zbiorcze"
 
 
 def main():
+
+    parser = configparser.ConfigParser()
+    print(os.path.join(MAIN_DIR, 'config.txt'))
+    parser.read(os.path.join(MAIN_DIR, 'config.txt'),  encoding='utf-8')
+    AGENCJE_SPECJALNE      = parser.get("config", "AGENCJE_SPECJALNE")
+    start_date      = parser.get("config", "start_date")
+    stop_date      = parser.get("config", "stop_date")
+
+    special = AGENCJE_SPECJALNE.split(',')
+
     df = get_df_newest_pdd()
 
-    start_date = '2020-01-01'
-    stop_date = '2025-11-11'
     df = df[(df['Policy issue date']>=start_date) & (df['Policy issue date']<=stop_date) & (df['Status'] == 'cancelled')]
-
     df_out = df[(df['Total policy annual premium [pln]'].astype(float) > 0)]
 
     for agent in special:

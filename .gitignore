@@ -173,3 +173,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 pdd_cancelled.xlsx
+pdd_anulowane_zbiorcze.exe

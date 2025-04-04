@@ -1,0 +1,4 @@
+[config]
+AGENCJE_SPECJALNE = MUBI,DIAMOND FINANCE
+start_date = 2025-03-25
+stop_date  = 2025-04-04
