@@ -35,7 +35,7 @@ script_name = "pdd_anulowane_zbiorcze"
 def main():
 
     parser = configparser.ConfigParser()
-    print(os.path.join(MAIN_DIR, 'config.txt'))
+    #print(os.path.join(MAIN_DIR, 'config.txt'))
     parser.read(os.path.join(MAIN_DIR, 'config.txt'),  encoding='utf-8')
     AGENCJE_SPECJALNE      = parser.get("config", "AGENCJE_SPECJALNE")
     start_date      = parser.get("config", "start_date")
@@ -53,7 +53,11 @@ def main():
         df_out = pandas.concat([df_out, df1])
 
     df_out = df_out[['Policy number', 'Agent company name','Policy holder first Name','Policy holder last name','Policy holder company name','Policy issue date','Total policy annual premium [pln]', 'VIN No.','Agent natural person name and last name']]
-    df_out.to_excel("pdd_cancelled.xlsx", index=False)
+
+    if os.path.isfile(MAIN_DIR + "\\pdd_cancelled.xlsx"):
+        os.remove(MAIN_DIR + "\\pdd_cancelled.xlsx")
+        
+    df_out.to_excel(MAIN_DIR + "\\pdd_cancelled.xlsx", index=False)
 
 
     
